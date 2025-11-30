@@ -19,78 +19,97 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import PaymentIcon from '@mui/icons-material/Payment';
-import LoyaltyIcon from '@mui/icons-material/Loyalty';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import SearchIcon from '@mui/icons-material/Search';
+import DevicesIcon from '@mui/icons-material/Devices';
+import SecurityIcon from '@mui/icons-material/Security';
 
-// Estructura para FAQs con categorías
+// Estructura para FAQs con categorías actualizadas para Supplie.me
 const faqCategories = [
   {
     name: 'General',
     icon: <HelpOutlineIcon />,
     items: [
       {
-        question: '¿Cuáles son los horarios de atención?',
-        answer: 'Nuestro horario de atención es de lunes a domingo de 8:00 AM a 10:00 PM.',
-        icon: <AccessTimeIcon color="primary" />
+        question: '¿Qué es Supplie.me?',
+        answer: 'Supplie.me es una plataforma tecnológica diseñada para empoderar a dueños de tiendas de abarrotes y pequeños comercios. Ofrecemos un sistema integral que incluye gestión de inventario, punto de venta, tienda virtual y herramientas de análisis para hacer crecer tu negocio.',
+        icon: <StorefrontIcon color="primary" />
       },
       {
-        question: '¿Cómo puedo reportar un problema con mi pedido?',
-        answer: 'Puedes reportar cualquier problema con tu pedido llamando a nuestro servicio al cliente al (55) 1234-5678, enviando un correo a soporte@minisuper.com o visitándonos en tienda. Atenderemos tu caso lo antes posible.',
-        icon: <SupportAgentIcon color="primary" />
+        question: '¿Para quién está diseñado Supplie.me?',
+        answer: 'Supplie.me está diseñado principalmente para tiendas de abarrotes, misceláneas, minimercados y pequeños comercios que quieran digitalizar su operación y tener un mejor control de su negocio. Es ideal para comerciantes que buscan crecer sin complicaciones tecnológicas.',
+        icon: <HelpOutlineIcon color="primary" />
+      },
+      {
+        question: '¿Cómo puedo empezar a usar Supplie.me?',
+        answer: 'Es muy fácil. Puedes solicitar una demo gratuita desde nuestra página de contacto. Un miembro de nuestro equipo te contactará para mostrarte la plataforma y ayudarte a configurar tu tienda. También puedes registrarte como beta tester para probar las nuevas funcionalidades.',
+        icon: <RocketLaunchIcon color="primary" />
       }
     ]
   },
   {
-    name: 'Pedidos y Envíos',
-    icon: <LocalShippingIcon />,
+    name: 'Funcionalidades',
+    icon: <InventoryIcon />,
     items: [
       {
-        question: '¿Realizan envíos a domicilio?',
-        answer: 'Sí, realizamos envíos a domicilio dentro de un radio de 5 km desde nuestra ubicación. El costo del envío varía según la distancia.',
-        icon: <LocalShippingIcon color="primary" />
+        question: '¿Qué incluye el sistema de inventario?',
+        answer: 'Nuestro sistema de inventario te permite registrar todos tus productos, controlar el stock en tiempo real, recibir alertas cuando los productos estén por agotarse, generar reportes de movimientos y mantener un historial completo de todas las transacciones.',
+        icon: <InventoryIcon color="primary" />
       },
       {
-        question: '¿Puedo hacer pedidos por teléfono o en línea?',
-        answer: 'Sí, puedes realizar pedidos a través de nuestra página web, por teléfono llamando al (55) 1234-5678 o vía WhatsApp.',
-        icon: <ShoppingBasketIcon color="primary" />
+        question: '¿Puedo vender en línea con Supplie.me?',
+        answer: 'Sí, Supplie.me incluye una tienda virtual integrada donde tus clientes pueden ver tus productos, hacer pedidos y coordinar la entrega o recogida. Tu tienda estará disponible 24/7 sin necesidad de conocimientos técnicos de tu parte.',
+        icon: <StorefrontIcon color="primary" />
+      },
+      {
+        question: '¿Funciona en dispositivos móviles?',
+        answer: 'Absolutamente. Supplie.me está diseñado con un enfoque "mobile-first", lo que significa que funciona perfectamente en smartphones, tablets y computadoras. Puedes gestionar tu negocio desde cualquier dispositivo con conexión a internet.',
+        icon: <DevicesIcon color="primary" />
       }
     ]
   },
   {
-    name: 'Pagos y Promociones',
+    name: 'Precios y Pagos',
     icon: <PaymentIcon />,
     items: [
       {
-        question: '¿Cuáles son los métodos de pago aceptados?',
-        answer: 'Aceptamos efectivo, tarjetas de crédito/débito, transferencias bancarias y pagos a través de aplicaciones móviles como PayPal y Mercado Pago.',
+        question: '¿Cuánto cuesta Supplie.me?',
+        answer: 'Actualmente estamos en fase de lanzamiento y ofrecemos acceso gratuito a nuestros beta testers. Próximamente lanzaremos planes accesibles diseñados específicamente para pequeños comerciantes. Contáctanos para conocer más detalles y ser parte de los primeros usuarios.',
         icon: <PaymentIcon color="primary" />
       },
       {
-        question: '¿Tienen programa de lealtad o descuentos?',
-        answer: 'Sí, contamos con un programa de lealtad. Por cada compra acumulas puntos que puedes canjear por descuentos en futuras compras. Además, tenemos promociones especiales los días martes y jueves.',
-        icon: <LoyaltyIcon color="primary" />
+        question: '¿Qué métodos de pago aceptan mis clientes?',
+        answer: 'La tienda virtual de Supplie.me permite que tus clientes paguen en efectivo al recibir, transferencia bancaria, o pago en tienda. Próximamente integraremos pagos con tarjeta y otras pasarelas de pago digitales.',
+        icon: <PaymentIcon color="primary" />
+      },
+      {
+        question: '¿Hay costos ocultos o comisiones por venta?',
+        answer: 'No. En Supplie.me creemos en la transparencia total. Los costos de la plataforma son fijos y no cobramos comisiones por cada venta que realices. Tu ganancia es tu ganancia.',
+        icon: <PaymentIcon color="primary" />
       }
     ]
   },
   {
-    name: 'Productos y Devoluciones',
-    icon: <AssignmentReturnIcon />,
+    name: 'Soporte y Seguridad',
+    icon: <SupportAgentIcon />,
     items: [
       {
-        question: '¿Cuál es la política de devoluciones?',
-        answer: 'Aceptamos devoluciones dentro de las 24 horas posteriores a la compra, siempre y cuando el producto esté en perfecto estado y se presente el comprobante de compra.',
-        icon: <AssignmentReturnIcon color="primary" />
+        question: '¿Mis datos están seguros?',
+        answer: 'La seguridad es nuestra prioridad. Utilizamos encriptación de datos, respaldos automáticos diarios y servidores seguros para proteger toda la información de tu negocio. Cumplimos con las mejores prácticas de seguridad de la industria.',
+        icon: <SecurityIcon color="primary" />
       },
       {
-        question: '¿Ofrecen productos orgánicos o especiales?',
-        answer: 'Sí, contamos con una sección de productos orgánicos, sin gluten, veganos y para dietas especiales. Puedes consultar la disponibilidad en tienda o en nuestra página web.',
-        icon: <ShoppingBasketIcon color="primary" />
+        question: '¿Qué tipo de soporte ofrecen?',
+        answer: 'Ofrecemos soporte por email, WhatsApp y chat en vivo durante horario de oficina (Lunes a Viernes 9:00 AM - 6:00 PM). También contamos con una base de conocimientos con tutoriales y guías para ayudarte a sacar el máximo provecho de la plataforma.',
+        icon: <SupportAgentIcon color="primary" />
+      },
+      {
+        question: '¿Qué pasa si tengo un problema técnico?',
+        answer: 'Nuestro equipo de soporte está disponible para ayudarte. Puedes reportar cualquier problema a través de contacto@supplie.me o mediante el chat integrado en la plataforma. Nos comprometemos a responder en menos de 24 horas.',
+        icon: <SupportAgentIcon color="primary" />
       }
     ]
   }
@@ -112,33 +131,23 @@ export default function FAQ() {
     <Box sx={{ py: 6, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
         <Box sx={{ mb: 6, textAlign: 'center' }}>
-          <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom>
+          <Typography 
+            variant="h2" 
+            component="h1" 
+            fontWeight="bold" 
+            gutterBottom
+            sx={{ 
+              background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             Preguntas Frecuentes
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            Encuentra respuestas a las preguntas más comunes sobre nuestros productos y servicios.
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
+            Todo lo que necesitas saber sobre Supplie.me y cómo puede ayudarte a digitalizar tu negocio.
           </Typography>
         </Box>
-
-        {/* Buscador */}
-        <Paper 
-          elevation={0} 
-          sx={{ 
-            p: 2, 
-            display: 'flex', 
-            alignItems: 'center', 
-            mb: 4, 
-            borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'divider',
-            bgcolor: 'background.paper'
-          }}
-        >
-          <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
-          <Typography variant="body2" color="text.secondary">
-            Busca en nuestras preguntas frecuentes o explora por categorías
-          </Typography>
-        </Paper>
 
         {/* Categorías en pestañas */}
         <Box sx={{ mb: 4 }}>
@@ -147,7 +156,20 @@ export default function FAQ() {
             onChange={handleChange} 
             variant="scrollable"
             scrollButtons="auto"
-            sx={{ mb: 3 }}
+            sx={{ 
+              mb: 4,
+              '& .MuiTab-root': {
+                borderRadius: 2,
+                mr: 1,
+                textTransform: 'none',
+                fontWeight: 600,
+                minHeight: 48
+              },
+              '& .Mui-selected': {
+                bgcolor: 'primary.main',
+                color: 'white !important'
+              }
+            }}
           >
             {faqCategories.map((category, index) => (
               <Tab 
@@ -168,13 +190,14 @@ export default function FAQ() {
             >
               {currentTab === categoryIndex && (
                 <Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="h5" component="h2" fontWeight="medium">
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                    <Typography variant="h5" component="h2" fontWeight="bold">
                       {category.name}
                     </Typography>
                     <Chip 
                       label={`${category.items.length} preguntas`} 
                       size="small" 
+                      color="primary"
                       sx={{ ml: 2 }}
                     />
                   </Box>
@@ -186,30 +209,41 @@ export default function FAQ() {
                       onChange={handleAccordionChange(`${categoryIndex}-${itemIndex}`)}
                       sx={{ 
                         mb: 2, 
-                        borderRadius: '8px',
+                        borderRadius: '12px !important',
                         overflow: 'hidden',
-                        '&:before': { display: 'none' }
+                        boxShadow: 'none',
+                        border: '1px solid',
+                        borderColor: expanded === `${categoryIndex}-${itemIndex}` ? 'primary.main' : 'divider',
+                        '&:before': { display: 'none' },
+                        transition: 'all 0.3s ease'
                       }}
                     >
                       <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
+                        expandIcon={<ExpandMoreIcon sx={{ color: expanded === `${categoryIndex}-${itemIndex}` ? 'white' : 'primary.main' }} />}
                         sx={{ 
-                          '&.Mui-expanded': { 
-                            minHeight: 56,
-                            bgcolor: 'primary.light',
-                            color: 'white'
+                          bgcolor: expanded === `${categoryIndex}-${itemIndex}` ? 'primary.main' : 'transparent',
+                          color: expanded === `${categoryIndex}-${itemIndex}` ? 'white' : 'text.primary',
+                          transition: 'all 0.3s ease',
+                          '& .MuiAccordionSummary-content': {
+                            alignItems: 'center'
                           }
                         }}
                       >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Box sx={{ mr: 2, display: 'flex' }}>
+                          <Box sx={{ 
+                            mr: 2, 
+                            display: 'flex',
+                            '& svg': {
+                              color: expanded === `${categoryIndex}-${itemIndex}` ? 'white' : 'primary.main'
+                            }
+                          }}>
                             {item.icon}
                           </Box>
                           <Typography 
                             variant="h6" 
                             sx={{ 
-                              fontWeight: expanded === `${categoryIndex}-${itemIndex}` ? 'bold' : 'medium',
-                              fontSize: '1.1rem'
+                              fontWeight: 600,
+                              fontSize: '1.05rem'
                             }}
                           >
                             {item.question}
@@ -217,7 +251,7 @@ export default function FAQ() {
                         </Box>
                       </AccordionSummary>
                       <AccordionDetails sx={{ bgcolor: 'background.paper', p: 3 }}>
-                        <Typography variant="body1">
+                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8 }}>
                           {item.answer}
                         </Typography>
                       </AccordionDetails>
@@ -231,41 +265,44 @@ export default function FAQ() {
 
         {/* Sección de ayuda adicional */}
         <Paper 
-          elevation={2} 
+          elevation={0} 
           sx={{ 
-            p: 4, 
+            p: 5, 
             mb: 6, 
-            borderRadius: 3,
-            bgcolor: 'primary.light',
-            color: 'white'
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
+            color: 'white',
+            textAlign: 'center'
           }}
         >
-          <Grid container spacing={3} alignItems="center">
+          <Grid container spacing={3} alignItems="center" justifyContent="center">
             <Grid size={{ xs: 12, md: 8 }}>
-              <Typography variant="h5" component="h2" fontWeight="bold" gutterBottom>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <SupportAgentIcon sx={{ fontSize: 64, opacity: 0.9 }} />
+              </Box>
+              <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom>
                 ¿No encontraste lo que buscabas?
               </Typography>
-              <Typography variant="body1" paragraph>
-                Si tienes alguna pregunta adicional, no dudes en contactarnos. Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier duda.
+              <Typography variant="body1" paragraph sx={{ opacity: 0.95, maxWidth: 600, mx: 'auto' }}>
+                Nuestro equipo de soporte está listo para ayudarte con cualquier duda. 
+                Contáctanos y te responderemos en menos de 24 horas.
               </Typography>
               <Button 
                 component={Link} 
                 href="/contact"
                 variant="contained" 
-                color="primary"
+                size="large"
                 sx={{ 
                   bgcolor: 'white', 
                   color: 'primary.main',
-                  '&:hover': { bgcolor: 'background.paper' }
+                  fontWeight: 'bold',
+                  px: 5,
+                  py: 1.5,
+                  '&:hover': { bgcolor: 'grey.100' }
                 }}
               >
                 Contáctanos
               </Button>
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ textAlign: 'center' }}>
-                <SupportAgentIcon sx={{ fontSize: 80, opacity: 0.9 }} />
-              </Box>
             </Grid>
           </Grid>
         </Paper>
@@ -278,6 +315,7 @@ export default function FAQ() {
             variant="outlined" 
             color="primary"
             size="large"
+            sx={{ px: 5 }}
           >
             Regresar al Inicio
           </Button>
@@ -285,4 +323,4 @@ export default function FAQ() {
       </Container>
     </Box>
   );
-} 
+}

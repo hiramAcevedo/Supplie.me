@@ -16,7 +16,6 @@ import {
   CardActionArea,
   Stack,
   Chip,
-  Divider,
   Snackbar,
   Alert
 } from '@mui/material';
@@ -24,32 +23,35 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import SpeedIcon from '@mui/icons-material/Speed';
 import { useCartStore, CartItem } from '../store/cartStore';
+import { useProductStore, Product } from '../store/productStore';
 
 // Imágenes para el carousel
 const carouselImages = [
   {
-    src: '/logo_minisuper_.jpeg',
-    alt: 'Promoción de apertura',
-    title: '¡Bienvenidos a MiniSuper!',
-    subtitle: 'Encuentra todo lo que necesitas en un solo lugar',
+    src: '/supplie_me_logo_150x40.svg',
+    alt: 'Supplie.me - Tu tienda inteligente',
+    title: '¡Bienvenido a Supplie.me!',
+    subtitle: 'Empoderamos tu tienda con tecnología inteligente',
+    isLogo: true
   },
   {
     src: '/manzana.avif',
     alt: 'Productos frescos',
-    title: 'Productos frescos todos los días',
-    subtitle: 'Calidad garantizada en frutas y verduras',
+    title: 'Gestiona tu inventario fácilmente',
+    subtitle: 'Control total de productos y stock en tiempo real',
+    isLogo: false
   },
   {
     src: '/pollopechuga.jpeg',
     alt: 'Carnes frescas',
-    title: 'Entrega a domicilio',
-    subtitle: 'Recibe tus compras sin salir de casa',
+    title: 'Vende más, preocúpate menos',
+    subtitle: 'Sistema de punto de venta simple y efectivo',
+    isLogo: false
   }
 ];
-
-// Importar el store de productos
-import { useProductStore, Product } from '../store/productStore';
 
 // Componente de Carousel
 const Carousel = ({ images }: { images: typeof carouselImages }) => {
@@ -59,7 +61,6 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
-
     return () => clearInterval(interval);
   }, [images.length]);
 
@@ -67,10 +68,11 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
     <Box 
       sx={{
         position: 'relative',
-        height: {xs: '300px', md: '500px'},
+        height: {xs: '350px', md: '500px'},
         overflow: 'hidden',
         borderRadius: 4,
-        mb: 6
+        mb: 6,
+        background: 'linear-gradient(135deg, #F97316 0%, #FB923C 50%, #FCD34D 100%)'
       }}
     >
       {images.map((image, index) => (
@@ -84,48 +86,85 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
             height: '100%',
             opacity: index === currentIndex ? 1 : 0,
             transition: 'opacity 1s ease-in-out',
-            bgcolor: 'grey.200',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}
         >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={300}
-            height={300}
-            style={{ objectFit: 'contain' }}
-          />
-          <Box 
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
-              padding: 4,
-              color: 'white'
-            }}
-          >
-            <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom>
-              {image.title}
-            </Typography>
-            <Typography variant="h6">
-              {image.subtitle}
-            </Typography>
-          </Box>
+          <Container maxWidth="md" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: { xs: 'column', md: 'row' }, gap: 4, px: 4 }}>
+            <Box sx={{ textAlign: { xs: 'center', md: 'left' }, color: 'white', zIndex: 2 }}>
+              <Typography variant="h3" component="h2" fontWeight="bold" gutterBottom sx={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
+                {image.title}
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.95, textShadow: '0 1px 5px rgba(0,0,0,0.2)' }}>
+                {image.subtitle}
+              </Typography>
+              {index === 0 && (
+                <Button 
+                  component={Link}
+                  href="/products"
+                  variant="contained"
+                  size="large"
+                  sx={{ 
+                    mt: 3, 
+                    bgcolor: 'white', 
+                    color: 'primary.main',
+                    fontWeight: 'bold',
+                    px: 4,
+                    '&:hover': { bgcolor: 'grey.100' }
+                  }}
+                >
+                  Explorar Tienda
+                </Button>
+              )}
+            </Box>
+            <Box sx={{ position: 'relative' }}>
+              {image.isLogo ? (
+                <Box sx={{ 
+                  bgcolor: 'white', 
+                  p: 4, 
+                  borderRadius: 4, 
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={200}
+                    height={55}
+                    style={{ objectFit: 'contain' }}
+                    priority
+                  />
+                </Box>
+              ) : (
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={250}
+                  height={250}
+                  style={{ 
+                    objectFit: 'contain', 
+                    borderRadius: '12px',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+                  }}
+                />
+              )}
+            </Box>
+          </Container>
         </Box>
       ))}
       
+      {/* Indicadores */}
       <Box 
         sx={{
           position: 'absolute',
-          bottom: 16,
+          bottom: 24,
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
-          gap: 1
+          gap: 1.5
         }}
       >
         {images.map((_, index) => (
@@ -133,12 +172,12 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
             key={index}
             onClick={() => setCurrentIndex(index)}
             sx={{
-              width: 12,
+              width: index === currentIndex ? 32 : 12,
               height: 12,
-              bgcolor: index === currentIndex ? 'primary.main' : 'white',
-              borderRadius: '50%',
+              bgcolor: index === currentIndex ? 'white' : 'rgba(255,255,255,0.5)',
+              borderRadius: 2,
               cursor: 'pointer',
-              transition: 'background-color 0.3s'
+              transition: 'all 0.3s ease'
             }}
           />
         ))}
@@ -147,7 +186,7 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
   );
 };
 
-// Componente de tarjeta de producto destacado
+// Componente de tarjeta de producto
 const FeaturedProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -172,13 +211,9 @@ const FeaturedProductCard = ({ product }: { product: Product }) => {
     setOpenSnackbar(true);
   };
   
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
-  
   return (
     <>
-      <Card sx={{ height: '100%', borderRadius: 3, overflow: 'hidden', boxShadow: 2 }}>
+      <Card sx={{ height: '100%', borderRadius: 3, overflow: 'hidden' }}>
         <CardActionArea component={Link} href={`/products/${product.id}`}>
           <Box sx={{ position: 'relative', pt: '100%', bgcolor: 'grey.50' }}>
             <CardMedia
@@ -209,18 +244,13 @@ const FeaturedProductCard = ({ product }: { product: Product }) => {
                 label={`-${product.discountPercent}%`}
                 color="error"
                 size="small"
-                sx={{
-                  position: 'absolute',
-                  top: 16,
-                  right: 16,
-                  fontWeight: 'bold'
-                }}
+                sx={{ position: 'absolute', top: 12, right: 12, fontWeight: 'bold' }}
               />
             )}
           </Box>
           
           <CardContent>
-            <Typography variant="h6" component="h3" gutterBottom noWrap>
+            <Typography variant="h6" component="h3" gutterBottom noWrap fontWeight="600">
               {product.name}
             </Typography>
             
@@ -230,11 +260,7 @@ const FeaturedProductCard = ({ product }: { product: Product }) => {
               </Typography>
               
               {(product.discountPercent ?? 0) > 0 && (
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  sx={{ textDecoration: 'line-through' }}
-                >
+                <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
                   ${product.price.toFixed(2)}
                 </Typography>
               )}
@@ -258,15 +284,10 @@ const FeaturedProductCard = ({ product }: { product: Product }) => {
       <Snackbar 
         open={openSnackbar} 
         autoHideDuration={3000} 
-        onClose={handleCloseSnackbar}
+        onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity="success" 
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
           {product.name} agregado al carrito
         </Alert>
       </Snackbar>
@@ -275,118 +296,58 @@ const FeaturedProductCard = ({ product }: { product: Product }) => {
 };
 
 export default function Home() {
-  // Obtener productos destacados del store global
   const { getFeaturedProducts } = useProductStore();
+  
+  const features = [
+    { icon: <InventoryIcon sx={{ fontSize: 48 }} />, title: 'Control de Inventario', description: 'Gestiona tu stock en tiempo real', color: 'primary.main' },
+    { icon: <StorefrontIcon sx={{ fontSize: 48 }} />, title: 'Tienda Virtual', description: 'Tu negocio disponible 24/7', color: 'secondary.main' },
+    { icon: <SpeedIcon sx={{ fontSize: 48 }} />, title: 'Punto de Venta', description: 'Ventas rápidas y sencillas', color: 'success.main' },
+    { icon: <DeliveryDiningIcon sx={{ fontSize: 48 }} />, title: 'Entregas', description: 'Gestión de pedidos a domicilio', color: 'info.main' }
+  ];
+
   return (
     <Box>
-      {/* Hero section con carousel */}
       <Container maxWidth="lg" sx={{ pt: 4, pb: 8 }}>
         <Carousel images={carouselImages} />
         
-        {/* Sección de ventajas */}
+        {/* Características */}
         <Grid container spacing={3} sx={{ mb: 8 }}>
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 3, 
-                textAlign: 'center', 
-                height: '100%',
-                borderRadius: 3,
-                bgcolor: 'primary.light',
-                color: 'white'
-              }}
-            >
-              <StorefrontIcon sx={{ fontSize: 48, mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                Amplio surtido
-              </Typography>
-              <Typography variant="body2">
-                Todo lo que necesitas en un solo lugar
-              </Typography>
-            </Paper>
-          </Grid>
-          
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 3, 
-                textAlign: 'center', 
-                height: '100%',
-                borderRadius: 3,
-                bgcolor: 'success.light',
-                color: 'white'
-              }}
-            >
-              <LocalOfferIcon sx={{ fontSize: 48, mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                Precios bajos
-              </Typography>
-              <Typography variant="body2">
-                Ofertas y promociones todos los días
-              </Typography>
-            </Paper>
-          </Grid>
-          
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 3, 
-                textAlign: 'center', 
-                height: '100%',
-                borderRadius: 3,
-                bgcolor: 'info.light',
-                color: 'white'
-              }}
-            >
-              <DeliveryDiningIcon sx={{ fontSize: 48, mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                Entrega rápida
-              </Typography>
-              <Typography variant="body2">
-                Tus productos en menos de 60 minutos
-              </Typography>
-            </Paper>
-          </Grid>
-          
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 3, 
-                textAlign: 'center', 
-                height: '100%',
-                borderRadius: 3,
-                bgcolor: 'warning.light',
-                color: 'white'
-              }}
-            >
-              <ShoppingCartIcon sx={{ fontSize: 48, mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                Fácil compra
-              </Typography>
-              <Typography variant="body2">
-                Proceso de compra sencillo y seguro
-              </Typography>
-            </Paper>
-          </Grid>
+          {features.map((feature, index) => (
+            <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 3, 
+                  textAlign: 'center', 
+                  height: '100%',
+                  borderRadius: 4,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    borderColor: feature.color,
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.1)'
+                  }
+                }}
+              >
+                <Box sx={{ color: feature.color, mb: 2 }}>{feature.icon}</Box>
+                <Typography variant="h6" gutterBottom fontWeight="bold">{feature.title}</Typography>
+                <Typography variant="body2" color="text.secondary">{feature.description}</Typography>
+              </Paper>
+            </Grid>
+          ))}
         </Grid>
         
-        {/* Sección de productos destacados */}
+        {/* Productos destacados */}
         <Box sx={{ mb: 8 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-            <Typography variant="h4" component="h2" fontWeight="bold">
-              Productos destacados
-            </Typography>
-            <Button 
-              component={Link} 
-              href="/products" 
-              variant="outlined"
-              sx={{ borderRadius: 2 }}
-            >
-              Ver todos
+            <Box>
+              <Typography variant="h4" component="h2" fontWeight="bold">Productos Destacados</Typography>
+              <Typography variant="body1" color="text.secondary">Los favoritos de nuestros clientes</Typography>
+            </Box>
+            <Button component={Link} href="/products" variant="outlined" sx={{ borderRadius: 2 }}>
+              Ver catálogo completo
             </Button>
           </Box>
           
@@ -403,44 +364,45 @@ export default function Home() {
         <Paper 
           elevation={0}
           sx={{ 
-            p: 4, 
-            borderRadius: 3, 
+            p: { xs: 4, md: 6 }, 
+            borderRadius: 4, 
             mb: 8,
-            background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+            background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
             color: 'white',
-            textAlign: 'center'
+            textAlign: 'center',
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
-          <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom>
-            ¡50% de descuento en tu primera compra!
-          </Typography>
-          <Typography variant="h6" paragraph>
-            Usa el código BIENVENIDO50 al finalizar tu compra
-          </Typography>
-          <Button 
-            variant="contained" 
-            size="large"
-            component={Link}
-            href="/products"
-            sx={{ 
-              mt: 2, 
-              bgcolor: 'white', 
-              color: '#FE6B8B', 
-              fontWeight: 'bold',
-              px: 4,
-              '&:hover': {
-                bgcolor: 'rgba(255,255,255,0.9)'
-              }
-            }}
-          >
-            Comprar ahora
-          </Button>
+          <Box sx={{ position: 'relative', zIndex: 2 }}>
+            <LocalOfferIcon sx={{ fontSize: 60, mb: 2, opacity: 0.9 }} />
+            <Typography variant="h3" component="h2" fontWeight="bold" gutterBottom>
+              ¡Digitaliza tu Negocio Hoy!
+            </Typography>
+            <Typography variant="h6" paragraph sx={{ opacity: 0.95, maxWidth: 600, mx: 'auto' }}>
+              Únete a los comerciantes que ya confían en Supplie.me para gestionar su tienda de manera inteligente
+            </Typography>
+            <Button 
+              variant="contained" 
+              size="large"
+              component={Link}
+              href="/contact"
+              sx={{ mt: 2, bgcolor: 'white', color: 'primary.main', fontWeight: 'bold', px: 5, py: 1.5, '&:hover': { bgcolor: 'grey.100' } }}
+            >
+              Solicitar Demo
+            </Button>
+          </Box>
+          <Box sx={{ position: 'absolute', top: -50, right: -50, width: 200, height: 200, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)' }} />
+          <Box sx={{ position: 'absolute', bottom: -30, left: -30, width: 150, height: 150, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)' }} />
         </Paper>
         
-        {/* Sección de categorías */}
+        {/* Categorías */}
         <Box>
-          <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom mb={4}>
+          <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom mb={1}>
             Explora por categorías
+          </Typography>
+          <Typography variant="body1" color="text.secondary" mb={4}>
+            Encuentra lo que necesitas rápidamente
           </Typography>
           
           <Grid container spacing={2}>
@@ -454,21 +416,21 @@ export default function Home() {
                     p: 3, 
                     textAlign: 'center', 
                     borderRadius: 3,
-                    border: '1px solid',
+                    border: '2px solid',
                     borderColor: 'divider',
                     transition: 'all 0.3s',
                     textDecoration: 'none',
                     color: 'text.primary',
+                    display: 'block',
                     '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: 3
-                    },
-                    display: 'block'
+                      borderColor: 'primary.main',
+                      bgcolor: 'primary.main',
+                      color: 'white',
+                      transform: 'translateY(-4px)'
+                    }
                   }}
                 >
-                  <Typography variant="h6" component="h3">
-                    {category}
-                  </Typography>
+                  <Typography variant="h6" component="h3" fontWeight="600">{category}</Typography>
                 </Paper>
               </Grid>
             ))}
@@ -477,4 +439,4 @@ export default function Home() {
       </Container>
     </Box>
   );
-} 
+}

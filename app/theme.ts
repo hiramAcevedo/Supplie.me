@@ -2,57 +2,94 @@
 
 import { createTheme } from '@mui/material/styles';
 
+// Tema personalizado para Supplie.me
+// Colores principales: Naranja, Gris y Blanco
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
-      contrastText: '#fff',
+      main: '#F97316', // Naranja vibrante (color principal de la marca)
+      light: '#FB923C',
+      dark: '#EA580C',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#9c27b0',
-      light: '#ba68c8',
-      dark: '#7b1fa2',
-      contrastText: '#fff',
+      main: '#4A5568', // Gris elegante
+      light: '#718096',
+      dark: '#2D3748',
+      contrastText: '#FFFFFF',
     },
     background: {
-      default: '#f5f5f5',
-      paper: '#ffffff',
+      default: '#F7FAFC', // Fondo gris muy claro
+      paper: '#FFFFFF',
     },
     error: {
-      main: '#d32f2f',
+      main: '#E53E3E',
+      light: '#FC8181',
+      dark: '#C53030',
     },
     warning: {
-      main: '#ff9800',
+      main: '#F6AD55',
+      light: '#FBD38D',
+      dark: '#DD6B20',
     },
     info: {
-      main: '#0288d1',
+      main: '#4299E1',
+      light: '#63B3ED',
+      dark: '#2B6CB0',
     },
     success: {
-      main: '#43a047',
+      main: '#48BB78',
+      light: '#68D391',
+      dark: '#2F855A',
     },
+    grey: {
+      50: '#F7FAFC',
+      100: '#EDF2F7',
+      200: '#E2E8F0',
+      300: '#CBD5E0',
+      400: '#A0AEC0',
+      500: '#718096',
+      600: '#4A5568',
+      700: '#2D3748',
+      800: '#1A202C',
+      900: '#171923',
+    },
+    text: {
+      primary: '#1A202C',
+      secondary: '#4A5568',
+    },
+    divider: '#E2E8F0',
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Plus Jakarta Sans", "Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontWeight: 500,
+      fontWeight: 700,
+      letterSpacing: '-0.02em',
     },
     h2: {
-      fontWeight: 500,
+      fontWeight: 700,
+      letterSpacing: '-0.01em',
     },
     h3: {
-      fontWeight: 500,
+      fontWeight: 600,
+      letterSpacing: '-0.01em',
     },
     h4: {
-      fontWeight: 500,
+      fontWeight: 600,
     },
     h5: {
-      fontWeight: 500,
+      fontWeight: 600,
     },
     h6: {
-      fontWeight: 500,
+      fontWeight: 600,
     },
+    button: {
+      fontWeight: 600,
+      textTransform: 'none',
+    },
+  },
+  shape: {
+    borderRadius: 12,
   },
   components: {
     MuiButtonBase: {
@@ -73,26 +110,77 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: 8,
+          borderRadius: 10,
+          fontWeight: 600,
+          padding: '10px 24px',
+        },
+        contained: {
+          boxShadow: '0 4px 14px 0 rgba(249, 115, 22, 0.25)',
+          '&:hover': {
+            boxShadow: '0 6px 20px rgba(249, 115, 22, 0.35)',
+          },
+        },
+        outlined: {
+          borderWidth: 2,
+          '&:hover': {
+            borderWidth: 2,
+          },
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: '0px 1px 5px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.08)',
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.05)',
+          borderRadius: 16,
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 16,
+        },
+        elevation1: {
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+        },
+        elevation2: {
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+        },
+        elevation3: {
+          boxShadow: '0 6px 24px rgba(0, 0, 0, 0.1)',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: 10,
+          },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontWeight: 500,
         },
       },
     },
   },
 });
 
-export default theme; 
+export default theme;

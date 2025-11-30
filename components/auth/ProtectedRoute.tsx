@@ -15,11 +15,16 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
   const { isAuthenticated, isAdmin } = useAuthStore();
   
   useEffect(() => {
-    // Si no está autenticado, redirigir al login
+    // Si no está autenticado
     if (!isAuthenticated) {
-      // Guardar la ruta actual para redirigir después del login
-      sessionStorage.setItem('redirectAfterLogin', pathname);
-      router.push('/login');
+      // Si es una ruta de admin, redirigir al login de admin
+      if (adminOnly || pathname.startsWith('/admin')) {
+        router.push('/admin/login');
+      } else {
+        // Guardar la ruta actual para redirigir después del login
+        sessionStorage.setItem('redirectAfterLogin', pathname);
+        router.push('/login');
+      }
       return;
     }
     
@@ -37,4 +42,4 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
   
   // Durante la redirección, no mostrar nada
   return null;
-} 
+}

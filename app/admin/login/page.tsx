@@ -11,15 +11,14 @@ import {
   TextField, 
   Button, 
   Paper, 
-  Divider,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Divider
 } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import { useAuthStore, authenticateUser, isAdminEmail } from '../../store/authStore';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { useAuthStore, authenticateAdmin } from '../../../store/authStore';
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const { login, isAuthenticated, isAdmin } = useAuthStore();
 
@@ -30,27 +29,12 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   
+  // Comprobar si el usuario ya está autenticado como admin
   useEffect(() => {
-    if (isAuthenticated) {
-      redirectUser();
+    if (isAuthenticated && isAdmin) {
+      router.push('/admin');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
-  
-  const redirectUser = () => {
-    const savedRoute = sessionStorage.getItem('redirectAfterLogin');
-    
-    if (savedRoute) {
-      sessionStorage.removeItem('redirectAfterLogin');
-      router.push(savedRoute);
-    } else {
-      if (isAdmin) {
-        router.push('/admin');
-      } else {
-        router.push('/');
-      }
-    }
-  };
+  }, [isAuthenticated, isAdmin, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,32 +50,19 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    if (isAdminEmail(formData.email)) {
-      setError('Este es un correo de administrador. Por favor, ingresa desde el panel de administración.');
-      setIsLoading(false);
-      return;
-    }
-
     setTimeout(() => {
-      const user = authenticateUser(formData.email, formData.password);
+      // Solo autenticar administradores
+      const user = authenticateAdmin(formData.email, formData.password);
       
       if (user) {
         login(user);
+        router.push('/admin');
       } else {
-        setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.');
+        setError('Credenciales de administrador inválidas. Acceso denegado.');
       }
       
       setIsLoading(false);
     }, 1000);
-  };
-
-  const demoAccounts = [
-    { type: 'Usuario Demo', email: 'usuario@supplie.me', password: 'usuario123' },
-    { type: 'Cliente', email: 'cliente@supplie.me', password: 'cliente123' }
-  ];
-
-  const fillDemoCredentials = (email: string, password: string) => {
-    setFormData({ email, password });
   };
 
   return (
@@ -101,8 +72,8 @@ export default function LoginPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        py: 4,
-        background: 'linear-gradient(135deg, #F7FAFC 0%, #E2E8F0 50%, #FB923C 100%)'
+        background: 'linear-gradient(135deg, #1E293B 0%, #334155 50%, #F97316 100%)',
+        py: 4
       }}
     >
       <Container maxWidth="sm">
@@ -111,7 +82,7 @@ export default function LoginPage() {
           sx={{ 
             p: { xs: 4, md: 5 }, 
             borderRadius: 4,
-            boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
             background: 'rgba(255,255,255,0.98)'
           }}
         >
@@ -131,24 +102,24 @@ export default function LoginPage() {
                 display: 'inline-flex', 
                 alignItems: 'center', 
                 gap: 1, 
-                bgcolor: 'grey.100', 
+                bgcolor: 'warning.light', 
                 px: 2, 
                 py: 0.5, 
                 borderRadius: 2,
                 mb: 2
               }}
             >
-              <StorefrontIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-              <Typography variant="body2" fontWeight="600" color="text.secondary">
-                Portal de Clientes
+              <AdminPanelSettingsIcon sx={{ color: 'warning.dark', fontSize: 20 }} />
+              <Typography variant="body2" fontWeight="600" color="warning.dark">
+                Acceso Restringido
               </Typography>
             </Box>
             
             <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" color="text.primary">
-              Bienvenido
+              Panel de Administración
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Ingresa a tu cuenta para comprar
+              Ingresa tus credenciales de administrador
             </Typography>
           </Box>
 
@@ -163,7 +134,7 @@ export default function LoginPage() {
               fullWidth
               id="email"
               name="email"
-              label="Email"
+              label="Email de Administrador"
               type="email"
               margin="normal"
               variant="outlined"
@@ -218,49 +189,22 @@ export default function LoginPage() {
                 fontWeight: 600
               }}
             >
-              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Iniciar Sesión'}
+              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Ingresar al Panel'}
             </Button>
           </form>
 
-          <Divider sx={{ my: 3 }}>
-            <Typography variant="body2" color="text.secondary">
-              Prueba la plataforma
-            </Typography>
-          </Divider>
+          <Divider sx={{ my: 3 }} />
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-            {demoAccounts.map((account, index) => (
-              <Button
-                key={index}
-                variant="outlined"
-                onClick={() => fillDemoCredentials(account.email, account.password)}
-                color="secondary"
-                startIcon={<PersonIcon />}
-                fullWidth
-                sx={{ borderRadius: 2, py: 1.2 }}
-              >
-                Ingresar como {account.type}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ mt: 4, p: 2.5, bgcolor: 'primary.main', borderRadius: 3, textAlign: 'center' }}>
-            <Typography variant="body2" color="white" fontWeight={500}>
-              ¿Eres administrador de tienda?
+          <Box sx={{ p: 2.5, bgcolor: 'grey.100', borderRadius: 3, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary" fontWeight={500}>
+              Este acceso es exclusivo para administradores del sistema.
             </Typography>
-            <Link href="/admin/login" style={{ textDecoration: 'none' }}>
-              <Typography variant="body2" color="white" fontWeight="bold" sx={{ mt: 0.5, '&:hover': { textDecoration: 'underline' } }}>
-                Accede al panel de administración →
+            <Link href="/login" style={{ textDecoration: 'none' }}>
+              <Typography variant="body2" color="primary.main" fontWeight="bold" sx={{ mt: 1, '&:hover': { textDecoration: 'underline' } }}>
+                ← Volver al login de clientes
               </Typography>
             </Link>
           </Box>
-
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 3 }}>
-            ¿Quieres digitalizar tu negocio?{' '}
-            <Link href="/contact" style={{ color: '#F97316', fontWeight: 600 }}>
-              Contáctanos
-            </Link>
-          </Typography>
         </Paper>
       </Container>
     </Box>

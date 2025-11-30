@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { 
   AppBar, 
   Toolbar, 
-  Typography, 
   Button, 
   IconButton, 
   Drawer, 
@@ -19,7 +18,8 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Divider
+  Divider,
+  Typography
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PersonIcon from '@mui/icons-material/Person';
@@ -32,13 +32,10 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   
-  // Estados de Zustand
   const { totalItems } = useCartStore();
   const { user, isAuthenticated, isAdmin, logout } = useAuthStore();
 
-  // Sincronizar el carrito con el usuario autenticado
   useEffect(() => {
-    // Ejecutar la lógica de sincronización
     const { userId, setUserId } = useCartStore.getState();
     
     if (isAuthenticated && user && userId !== user.id) {
@@ -70,12 +67,11 @@ export default function Navbar() {
     setCartDrawerOpen(true);
   };
 
-  // Enlaces de navegación
   const navLinks = [
     { title: 'Inicio', path: '/' },
     { title: 'Productos', path: '/products' },
-    { title: 'Quiénes Somos', path: '/about' },
-    { title: 'Preguntas Frecuentes', path: '/faq' },
+    { title: 'Nosotros', path: '/about' },
+    { title: 'FAQ', path: '/faq' },
     { title: 'Contacto', path: '/contact' },
   ];
 
@@ -83,16 +79,15 @@ export default function Navbar() {
     <>
       <AppBar 
         position="fixed" 
-        color="primary"
         sx={{
-          bgcolor: 'primary.main',
-          color: 'white',
-          boxShadow: 3,
+          bgcolor: '#FFFFFF',
+          color: 'text.primary',
+          boxShadow: '0 2px 20px rgba(0,0,0,0.08)',
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar sx={{ py: { xs: 1, md: 1.5 } }}>
-            {/* Logo con imagen */}
+          <Toolbar sx={{ py: { xs: 0.5, md: 1 } }}>
+            {/* Logo SVG */}
             <Box 
               sx={{ 
                 display: 'flex', 
@@ -108,33 +103,19 @@ export default function Navbar() {
                   textDecoration: 'none' 
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
-                    <Image 
-                      src="/logo_minisuper_.jpeg"
-                      alt="MiniSuper Logo"
-                      width={40}
-                      height={40}
-                      style={{ 
-                        borderRadius: '50%',
-                        objectFit: 'cover'
-                      }}
-                      priority
-                    />
-                  </Box>
-                  <Typography 
-                    variant="h5" 
-                    component="div" 
-                    sx={{ fontWeight: 'bold', color: 'white' }}
-                  >
-                    MiniSuper
-                  </Typography>
-                </Box>
+                <Image 
+                  src="/supplie_me_logo_150x40.svg"
+                  alt="Supplie.me"
+                  width={130}
+                  height={35}
+                  style={{ objectFit: 'contain' }}
+                  priority
+                />
               </Link>
             </Box>
 
-            {/* Enlaces de navegación en pantallas medianas y grandes */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
+            {/* Enlaces de navegación */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5, alignItems: 'center' }}>
               {navLinks.map((link) => (
                 <Link 
                   key={link.path} 
@@ -142,12 +123,16 @@ export default function Navbar() {
                   style={{ textDecoration: 'none' }}
                 >
                   <Button 
-                    color="inherit" 
                     sx={{ 
                       mx: 0.5,
-                      fontSize: '1rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 500,
+                      color: 'text.secondary',
+                      borderRadius: 2,
+                      px: 2,
                       '&:hover': {
-                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                        bgcolor: 'primary.main',
+                        color: 'white',
                       }
                     }}
                   >
@@ -156,23 +141,23 @@ export default function Navbar() {
                 </Link>
               ))}
               
-              {/* Botón de carrito de compras con badge */}
               <IconButton 
-                color="inherit"
                 aria-label="carrito de compras"
-                sx={{ ml: 1 }}
+                sx={{ 
+                  ml: 1,
+                  color: 'text.secondary',
+                  '&:hover': { color: 'primary.main' }
+                }}
                 onClick={handleCartClick}
               >
-                <Badge badgeContent={totalItems} color="error" max={99}>
+                <Badge badgeContent={totalItems} color="primary" max={99}>
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
 
-              {/* Botón de usuario/login */}
               {isAuthenticated ? (
                 <>
                   <IconButton 
-                    color="inherit"
                     aria-label="perfil de usuario"
                     onClick={handleMenuClick}
                     sx={{ ml: 1 }}
@@ -180,13 +165,21 @@ export default function Navbar() {
                     <Avatar 
                       src={user?.avatar || undefined} 
                       alt={user?.name || 'Usuario'} 
-                      sx={{ width: 32, height: 32 }} 
+                      sx={{ 
+                        width: 36, 
+                        height: 36,
+                        border: '2px solid',
+                        borderColor: 'primary.main'
+                      }} 
                     />
                   </IconButton>
                   <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
+                    PaperProps={{
+                      sx: { borderRadius: 2, minWidth: 200, mt: 1 }
+                    }}
                   >
                     <MenuItem sx={{ pointerEvents: 'none' }}>
                       <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
@@ -195,7 +188,7 @@ export default function Navbar() {
                     </MenuItem>
                     <MenuItem sx={{ pointerEvents: 'none', color: 'primary.main' }}>
                       <Typography variant="body2">
-                        {isAdmin ? 'Administrador' : 'Cliente'}
+                        {isAdmin ? '👑 Administrador' : '👤 Cliente'}
                       </Typography>
                     </MenuItem>
                     <Divider />
@@ -211,7 +204,7 @@ export default function Navbar() {
                         </MenuItem>
                       </Link>
                     )}
-                    <MenuItem onClick={handleLogout}>
+                    <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
                       Cerrar Sesión
                     </MenuItem>
                   </Menu>
@@ -219,17 +212,10 @@ export default function Navbar() {
               ) : (
                 <Link href="/login" style={{ textDecoration: 'none' }}>
                   <Button 
-                    variant="outlined" 
-                    color="inherit"
+                    variant="contained" 
+                    color="primary"
                     startIcon={<PersonIcon />}
-                    sx={{ 
-                      ml: 1,
-                      borderColor: 'white',
-                      '&:hover': {
-                        borderColor: 'white',
-                        bgcolor: 'rgba(255, 255, 255, 0.1)',
-                      }
-                    }}
+                    sx={{ ml: 2, px: 3 }}
                   >
                     Iniciar Sesión
                   </Button>
@@ -237,26 +223,23 @@ export default function Navbar() {
               )}
             </Box>
 
-            {/* Botón de menú móvil */}
+            {/* Menú móvil */}
             <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
-              {/* Carrito para móvil */}
               <IconButton 
-                color="inherit"
                 aria-label="carrito de compras"
-                sx={{ mr: 1 }}
+                sx={{ mr: 1, color: 'text.secondary' }}
                 onClick={handleCartClick}
               >
-                <Badge badgeContent={totalItems} color="error" max={99}>
+                <Badge badgeContent={totalItems} color="primary" max={99}>
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
               
               <IconButton 
-                color="inherit" 
                 aria-label="menu"
                 onClick={toggleDrawer}
+                sx={{ color: 'text.secondary' }}
               >
-                {/* Icono de menú hamburguesa nativo de MUI */}
                 <span style={{fontSize: 28, fontWeight: 'bold'}}>≡</span>
               </IconButton>
             </Box>
@@ -264,7 +247,7 @@ export default function Navbar() {
         </Container>
       </AppBar>
 
-      {/* Menú móvil (Drawer) */}
+      {/* Drawer móvil */}
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -272,36 +255,45 @@ export default function Navbar() {
         sx={{
           '& .MuiDrawer-paper': {
             width: '80%',
-            maxWidth: '300px',
+            maxWidth: '320px',
+            borderRadius: '16px 0 0 16px'
           },
         }}
       >
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton onClick={toggleDrawer}>
-            <span style={{fontSize: 28, fontWeight: 'bold'}}>×</span>
-          </IconButton>
+        <Box sx={{ p: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Image 
+              src="/supplie_me_logo_150x40.svg"
+              alt="Supplie.me"
+              width={110}
+              height={30}
+              style={{ objectFit: 'contain' }}
+            />
+            <IconButton onClick={toggleDrawer}>
+              <span style={{fontSize: 24, fontWeight: 'bold'}}>×</span>
+            </IconButton>
+          </Box>
         </Box>
         
-        {/* Información de usuario en móvil */}
         {isAuthenticated && (
-          <Box sx={{ p: 2, display: 'flex', alignItems: 'center', bgcolor: 'primary.light', color: 'white' }}>
+          <Box sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', bgcolor: 'primary.main', color: 'white' }}>
             <Avatar 
               src={user?.avatar || undefined} 
               alt={user?.name || 'Usuario'} 
-              sx={{ width: 40, height: 40, mr: 2 }} 
+              sx={{ width: 44, height: 44, mr: 2 }} 
             />
             <Box>
               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                 {user?.name}
               </Typography>
-              <Typography variant="body2">
-                {isAdmin ? 'Administrador' : 'Cliente'}
+              <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                {isAdmin ? '👑 Administrador' : '👤 Cliente'}
               </Typography>
             </Box>
           </Box>
         )}
         
-        <List>
+        <List sx={{ px: 1 }}>
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -312,92 +304,57 @@ export default function Navbar() {
               <ListItem 
                 sx={{
                   cursor: 'pointer',
-                  '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+                  borderRadius: 2,
+                  mb: 0.5,
+                  '&:hover': { bgcolor: 'primary.light', color: 'white' }
                 }}
               >
-                <ListItemText primary={link.title} />
+                <ListItemText 
+                  primary={link.title} 
+                  primaryTypographyProps={{ fontWeight: 500 }}
+                />
               </ListItem>
             </Link>
           ))}
           
           {isAuthenticated ? (
             <>
-              <Link
-                href="/profile"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-                onClick={toggleDrawer}
-              >
-                <ListItem 
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
-                  }}
-                >
+              <Divider sx={{ my: 2 }} />
+              <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }} onClick={toggleDrawer}>
+                <ListItem sx={{ cursor: 'pointer', borderRadius: 2, '&:hover': { bgcolor: 'grey.100' } }}>
                   <ListItemText primary="Mi Perfil" />
                 </ListItem>
               </Link>
               
               {isAdmin && (
-                <Link
-                  href="/admin"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  onClick={toggleDrawer}
-                >
-                  <ListItem 
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
-                    }}
-                  >
+                <Link href="/admin" style={{ textDecoration: 'none', color: 'inherit' }} onClick={toggleDrawer}>
+                  <ListItem sx={{ cursor: 'pointer', borderRadius: 2, '&:hover': { bgcolor: 'grey.100' } }}>
                     <ListItemText primary="Panel de Admin" />
                   </ListItem>
                 </Link>
               )}
               
               <ListItem 
-                onClick={() => {
-                  logout();
-                  toggleDrawer();
-                }}
-                sx={{
-                  cursor: 'pointer',
-                  color: 'error.main',
-                  '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
-                }}
+                onClick={() => { logout(); toggleDrawer(); }}
+                sx={{ cursor: 'pointer', color: 'error.main', borderRadius: 2, '&:hover': { bgcolor: 'error.light', color: 'white' } }}
               >
                 <ListItemText primary="Cerrar Sesión" />
               </ListItem>
             </>
           ) : (
-            <Link
-              href="/login"
-              style={{ textDecoration: 'none', color: 'inherit' }}
-              onClick={toggleDrawer}
-            >
-              <ListItem 
-                sx={{ 
-                  bgcolor: 'primary.main', 
-                  color: 'white', 
-                  mt: 2,
-                  cursor: 'pointer',
-                  '&:hover': { bgcolor: 'primary.dark' } 
-                }}
-              >
-                <ListItemText primary="Iniciar Sesión" />
-              </ListItem>
-            </Link>
+            <Box sx={{ p: 2 }}>
+              <Link href="/login" style={{ textDecoration: 'none' }} onClick={toggleDrawer}>
+                <Button variant="contained" fullWidth size="large" startIcon={<PersonIcon />}>
+                  Iniciar Sesión
+                </Button>
+              </Link>
+            </Box>
           )}
         </List>
       </Drawer>
       
-      {/* Drawer del carrito de compras */}
-      <CartDrawer 
-        open={cartDrawerOpen} 
-        onClose={() => setCartDrawerOpen(false)} 
-      />
-      
-      {/* Espacio para evitar que el contenido quede detrás del AppBar */}
+      <CartDrawer open={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
       <Toolbar />
     </>
   );
-} 
+}
