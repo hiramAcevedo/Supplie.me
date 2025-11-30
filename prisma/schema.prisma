@@ -1,0 +1,224 @@
+// Supplie.me - Prisma Schema
+// Sistema de Gestión de Inventario para Tiendas
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODELO DE USUARIOS
+// ============================================
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  SUPERADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(CUSTOMER)
+  avatar    String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  orders       Order[]
+  cartItems    CartItem[]
+  chatMessages ChatMessage[]
+  faqQuestions FAQQuestion[]
+
+  @@map("users")
+}
+
+// ============================================
+// MODELO DE PRODUCTOS
+// ============================================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relaciones
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  price           Float
+  image           String
+  stock           Int      @default(0)
+  rating          Float    @default(0)
+  discountPercent Float?   @default(0)
+  isActive        Boolean  @default(true)
+  sku             String?  @unique
+  barcode         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id])
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+// ============================================
+// MODELO DE CARRITO
+// ============================================
+
+model CartItem {
+  id        String   @id @default(cuid())
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+// ============================================
+// MODELO DE ÓRDENES
+// ============================================
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+  STORE
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  status          OrderStatus   @default(PENDING)
+  subtotal        Float
+  tax             Float         @default(0)
+  shipping        Float         @default(0)
+  total           Float
+  paymentMethod   PaymentMethod @default(CASH)
+  shippingAddress String?
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relaciones
+  userId String
+  user   User        @relation(fields: [userId], references: [id])
+  items  OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// ============================================
+// MODELO DE CHAT
+// ============================================
+
+enum MessageSender {
+  USER
+  BOT
+  AGENT
+}
+
+model ChatMessage {
+  id        String        @id @default(cuid())
+  content   String
+  sender    MessageSender
+  isRead    Boolean       @default(false)
+  createdAt DateTime      @default(now())
+
+  // Relaciones
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("chat_messages")
+}
+
+// ============================================
+// MODELO DE FAQ (FORO DE PREGUNTAS)
+// ============================================
+
+model FAQCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  icon        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones
+  questions FAQQuestion[]
+
+  @@map("faq_categories")
+}
+
+model FAQQuestion {
+  id         String   @id @default(cuid())
+  question   String
+  answer     String?
+  isAnswered Boolean  @default(false)
+  isPublic   Boolean  @default(true)
+  views      Int      @default(0)
+  likes      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relaciones
+  categoryId String
+  category   FAQCategory @relation(fields: [categoryId], references: [id])
+  userId     String?
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("faq_questions")
+}

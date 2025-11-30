@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import Chat from '@/components/ui/Chat'
+import ChatBot from '@/components/ui/ChatBot'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -56,7 +56,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-            <Chat />
+            <ChatBot />
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
