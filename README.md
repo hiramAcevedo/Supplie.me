@@ -1,4 +1,4 @@
-# MiniSuper Web - Sistema de Comercio Electrónico
+# Supplie.me - Sistema de Comercio Electrónico
 
 ## Descripción del Proyecto
 
