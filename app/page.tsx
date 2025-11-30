@@ -10,25 +10,17 @@ import {
   Button, 
   Paper, 
   Grid, 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  CardActionArea,
-  Stack,
-  Chip,
-  Snackbar,
-  Alert
+  Stack
 } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import SpeedIcon from '@mui/icons-material/Speed';
-import { useCartStore, CartItem } from '../store/cartStore';
-import { useProductStore, Product } from '../store/productStore';
+import { useProductStore } from '../store/productStore';
+import ProductSlider from '@/components/ui/ProductSlider';
 
-// Imágenes para el carousel
+// Imágenes para el carousel hero
 const carouselImages = [
   {
     src: '/supplie_me_logo_150x40.svg',
@@ -53,19 +45,23 @@ const carouselImages = [
   }
 ];
 
-// Componente de Carousel
-const Carousel = ({ images }: { images: typeof carouselImages }) => {
+// Componente de Carousel Hero (principal)
+const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images.length, isPaused]);
 
   return (
     <Box 
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       sx={{
         position: 'relative',
         height: {xs: '350px', md: '500px'},
@@ -156,6 +152,25 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
         </Box>
       ))}
       
+      {/* Indicador de pausa */}
+      {isPaused && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            bgcolor: 'rgba(0,0,0,0.5)',
+            color: 'white',
+            px: 2,
+            py: 0.5,
+            borderRadius: 2,
+            fontSize: '0.75rem'
+          }}
+        >
+          ⏸ Pausado
+        </Box>
+      )}
+      
       {/* Indicadores */}
       <Box 
         sx={{
@@ -186,117 +201,8 @@ const Carousel = ({ images }: { images: typeof carouselImages }) => {
   );
 };
 
-// Componente de tarjeta de producto
-const FeaturedProductCard = ({ product }: { product: Product }) => {
-  const { addItem } = useCartStore();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  
-  const discountedPrice = product.discountPercent 
-    ? product.price * (1 - product.discountPercent/100) 
-    : product.price;
-  
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const cartItem: CartItem = {
-      id: product.id,
-      name: product.name,
-      price: discountedPrice,
-      quantity: 1,
-      image: product.image,
-    };
-    
-    addItem(cartItem);
-    setOpenSnackbar(true);
-  };
-  
-  return (
-    <>
-      <Card sx={{ height: '100%', borderRadius: 3, overflow: 'hidden' }}>
-        <CardActionArea component={Link} href={`/products/${product.id}`}>
-          <Box sx={{ position: 'relative', pt: '100%', bgcolor: 'grey.50' }}>
-            <CardMedia
-              component="div"
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                p: 2
-              }}
-            >
-              <Image
-                src={product.image}
-                alt={product.name || 'Producto'}
-                width={150}
-                height={150}
-                style={{ objectFit: 'contain' }}
-              />
-            </CardMedia>
-            
-            {(product.discountPercent ?? 0) > 0 && (
-              <Chip
-                label={`-${product.discountPercent}%`}
-                color="error"
-                size="small"
-                sx={{ position: 'absolute', top: 12, right: 12, fontWeight: 'bold' }}
-              />
-            )}
-          </Box>
-          
-          <CardContent>
-            <Typography variant="h6" component="h3" gutterBottom noWrap fontWeight="600">
-              {product.name}
-            </Typography>
-            
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography variant="h6" color="primary.main" fontWeight="bold">
-                ${discountedPrice.toFixed(2)}
-              </Typography>
-              
-              {(product.discountPercent ?? 0) > 0 && (
-                <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                  ${product.price.toFixed(2)}
-                </Typography>
-              )}
-            </Stack>
-          </CardContent>
-        </CardActionArea>
-        
-        <Box sx={{ p: 2, pt: 0 }}>
-          <Button 
-            variant="contained" 
-            fullWidth 
-            startIcon={<ShoppingCartIcon />} 
-            sx={{ borderRadius: 2 }}
-            onClick={handleAddToCart}
-          >
-            Agregar
-          </Button>
-        </Box>
-      </Card>
-      
-      <Snackbar 
-        open={openSnackbar} 
-        autoHideDuration={3000} 
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
-          {product.name} agregado al carrito
-        </Alert>
-      </Snackbar>
-    </>
-  );
-};
-
 export default function Home() {
-  const { getFeaturedProducts } = useProductStore();
+  const { products, getFeaturedProducts } = useProductStore();
   
   const features = [
     { icon: <InventoryIcon sx={{ fontSize: 48 }} />, title: 'Control de Inventario', description: 'Gestiona tu stock en tiempo real', color: 'primary.main' },
@@ -305,10 +211,15 @@ export default function Home() {
     { icon: <DeliveryDiningIcon sx={{ fontSize: 48 }} />, title: 'Entregas', description: 'Gestión de pedidos a domicilio', color: 'info.main' }
   ];
 
+  // Obtener productos por categoría para diferentes sliders
+  const featuredProducts = getFeaturedProducts(8);
+  const allProducts = products.slice(0, 12);
+
   return (
     <Box>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 8 }}>
-        <Carousel images={carouselImages} />
+        {/* Hero Carousel */}
+        <HeroCarousel images={carouselImages} />
         
         {/* Características */}
         <Grid container spacing={3} sx={{ mb: 8 }}>
@@ -339,26 +250,23 @@ export default function Home() {
           ))}
         </Grid>
         
-        {/* Productos destacados */}
-        <Box sx={{ mb: 8 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-            <Box>
-              <Typography variant="h4" component="h2" fontWeight="bold">Productos Destacados</Typography>
-              <Typography variant="body1" color="text.secondary">Los favoritos de nuestros clientes</Typography>
-            </Box>
-            <Button component={Link} href="/products" variant="outlined" sx={{ borderRadius: 2 }}>
-              Ver catálogo completo
-            </Button>
-          </Box>
-          
-          <Grid container spacing={3}>
-            {getFeaturedProducts(4).map((product) => (
-              <Grid key={product.id} size={{ xs: 6, sm: 6, md: 3 }}>
-                <FeaturedProductCard product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+        {/* Slider de Productos Destacados */}
+        <ProductSlider 
+          products={featuredProducts}
+          title="🔥 Ofertas Especiales"
+          subtitle="Desliza para ver más ofertas • Se pausa al pasar el mouse"
+          autoPlay={true}
+          autoPlayInterval={4000}
+        />
+        
+        {/* Slider de Todos los Productos */}
+        <ProductSlider 
+          products={allProducts}
+          title="📦 Explora Nuestros Productos"
+          subtitle="Encuentra todo lo que necesitas para tu tienda"
+          autoPlay={true}
+          autoPlayInterval={5000}
+        />
         
         {/* Banner promocional */}
         <Paper 
