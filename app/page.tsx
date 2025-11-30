@@ -17,8 +17,10 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import SpeedIcon from '@mui/icons-material/Speed';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { useProductStore } from '../store/productStore';
 import ProductSlider from '@/components/ui/ProductSlider';
+import VideoSection from '@/components/ui/VideoSection';
 
 // Imágenes para el carousel hero
 const carouselImages = [
@@ -220,6 +222,59 @@ export default function Home() {
       <Container maxWidth="lg" sx={{ pt: 4, pb: 8 }}>
         {/* Hero Carousel */}
         <HeroCarousel images={carouselImages} />
+
+        {/* Video de Presentación */}
+        <Paper 
+          elevation={0}
+          sx={{ 
+            p: { xs: 3, md: 5 }, 
+            mb: 6, 
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #1E293B 0%, #334155 100%)',
+            color: 'white'
+          }}
+        >
+          <Grid container spacing={4} alignItems="center">
+            <Grid size={{ xs: 12, md: 5 }}>
+              <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                <PlayCircleOutlineIcon sx={{ color: 'primary.light' }} />
+                <Typography variant="overline" sx={{ color: 'primary.light', fontWeight: 'bold' }}>
+                  Conoce Supplie.me
+                </Typography>
+              </Stack>
+              <Typography variant="h4" fontWeight="bold" gutterBottom>
+                ¿Qué es Supplie.me?
+              </Typography>
+              <Typography variant="body1" sx={{ opacity: 0.9, mb: 3, lineHeight: 1.8 }}>
+                Descubre en 30 segundos cómo Supplie.me puede transformar tu tienda de abarrotes. 
+                Control de inventario, ventas en línea y mucho más.
+              </Typography>
+              <Button 
+                component={Link}
+                href="/contact"
+                variant="contained"
+                size="large"
+                sx={{ 
+                  bgcolor: 'primary.main', 
+                  color: 'white',
+                  '&:hover': { bgcolor: 'primary.dark' }
+                }}
+              >
+                Solicitar Demo Gratis
+              </Button>
+            </Grid>
+            <Grid size={{ xs: 12, md: 7 }}>
+              {/* Placeholder de YouTube - Reemplazar con video real */}
+              <VideoSection 
+                videoId="eoRO2UQUjG8"
+                aspectRatio="16/9"
+              />
+              <Typography variant="caption" sx={{ mt: 1, display: 'block', textAlign: 'center', opacity: 0.7 }}>
+                Video de presentación de Supplie.me
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
         
         {/* Características */}
         <Grid container spacing={3} sx={{ mb: 8 }}>

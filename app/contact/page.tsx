@@ -19,7 +19,8 @@ import {
   CardContent,
   Snackbar,
   IconButton,
-  Stack
+  Stack,
+  Chip
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -29,6 +30,9 @@ import SendIcon from '@mui/icons-material/Send';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import CodeIcon from '@mui/icons-material/Code';
 import GroupsIcon from '@mui/icons-material/Groups';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import VideoSection from '@/components/ui/VideoSection';
+import ClientsGallery from '@/components/ui/ClientsGallery';
 
 const FacebookIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -107,6 +111,58 @@ export default function Contact() {
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
             ¿Tienes una tienda de abarrotes? Sé parte de los comerciantes pioneros que están transformando su negocio con tecnología.
           </Typography>
+        </Box>
+
+        {/* Video de Invitación */}
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: { xs: 2, md: 4 }, 
+            mb: 6, 
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)',
+            border: '1px solid',
+            borderColor: 'primary.200'
+          }}
+        >
+          <Grid container spacing={4} alignItems="center">
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                <PlayCircleOutlineIcon color="primary" />
+                <Typography variant="overline" color="primary.main" fontWeight="bold">
+                  Video de Invitación
+                </Typography>
+              </Stack>
+              <Typography variant="h4" fontWeight="bold" gutterBottom>
+                ¿Y si digitalizar tu tienda fuera más fácil de lo que crees?
+              </Typography>
+              <Typography variant="body1" color="text.secondary" paragraph>
+                Descubre en 30 segundos cómo Supplie.me puede transformar tu negocio. 
+                Lo que ves en nuestra página es exactamente cómo tus clientes verán TU tienda.
+              </Typography>
+              <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+                <Chip label="✓ Sin costo inicial" variant="outlined" />
+                <Chip label="✓ Fácil de usar" variant="outlined" />
+                <Chip label="✓ Soporte incluido" variant="outlined" />
+              </Stack>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              {/* Placeholder de YouTube - Reemplazar con video real */}
+              <VideoSection 
+                videoId="CUEX1dpcGFY"
+                title=""
+                aspectRatio="16/9"
+              />
+              <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block', textAlign: 'center' }}>
+                Video de invitación de Supplie.me
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+
+        {/* Galería de Clientes */}
+        <Box sx={{ mb: 6 }}>
+          <ClientsGallery />
         </Box>
 
         {/* Cards de opciones */}
@@ -323,6 +379,86 @@ export default function Contact() {
             </Paper>
           </Grid>
         </Grid>
+
+        {/* Mapa de Ubicación */}
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            mt: 6, 
+            borderRadius: 4, 
+            overflow: 'hidden', 
+            border: '1px solid', 
+            borderColor: 'divider' 
+          }}
+        >
+          <Box sx={{ p: 3, bgcolor: 'primary.main', color: 'white' }}>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <LocationOnIcon sx={{ fontSize: 32 }} />
+              <Box>
+                <Typography variant="h5" fontWeight="bold">
+                  Nuestra Ubicación
+                </Typography>
+                <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  CUCEI - Universidad de Guadalajara, Guadalajara, Jalisco
+                </Typography>
+              </Box>
+            </Stack>
+          </Box>
+          <Box 
+            sx={{ 
+              position: 'relative',
+              width: '100%',
+              height: { xs: 300, md: 400 },
+              bgcolor: 'grey.100'
+            }}
+          >
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.0989693968!2d-103.32580892427988!3d20.654859380945537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af915e8f9c1f%3A0x5c0d1e7a9b81bb21!2sCentro%20Universitario%20de%20Ciencias%20Exactas%20e%20Ingenier%C3%ADas%20(CUCEI)!5e0!3m2!1ses-419!2smx!4v1701388800000!5m2!1ses-419!2smx"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación de Supplie.me - CUCEI, Universidad de Guadalajara"
+            />
+          </Box>
+          <Box sx={{ p: 3, bgcolor: 'grey.50' }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  Dirección Completa
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Blvd. Marcelino García Barragán #1421, Olímpica, 44430 Guadalajara, Jal., México
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent={{ md: 'flex-end' }}>
+                  <Button
+                    variant="contained"
+                    startIcon={<LocationOnIcon />}
+                    component="a"
+                    href="https://maps.google.com/?q=CUCEI+Universidad+de+Guadalajara"
+                    target="_blank"
+                    sx={{ borderRadius: 2 }}
+                  >
+                    Abrir en Google Maps
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<PhoneIcon />}
+                    component="a"
+                    href="tel:+523312345678"
+                    sx={{ borderRadius: 2 }}
+                  >
+                    Llamar Ahora
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Box>
+        </Paper>
 
         <Box sx={{ textAlign: 'center', mt: 6 }}>
           <Button component={Link} href="/" variant="outlined" color="primary" size="large">

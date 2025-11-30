@@ -221,42 +221,6 @@ export default function About() {
           </Paper>
         </Box>
         
-        {/* Ubicación */}
-        <Box sx={{ mb: 8 }}>
-          <Typography variant="h4" component="h2" gutterBottom fontWeight="bold">Ubicación</Typography>
-          <Grid container spacing={4}>
-            <Grid size={{ xs: 12, md: 5 }}>
-              <Paper elevation={0} sx={{ p: 4, borderRadius: 4, height: '100%', border: '1px solid', borderColor: 'divider' }}>
-                <Typography variant="h6" gutterBottom color="primary.main" fontWeight="bold">Sede de Desarrollo</Typography>
-                <Typography variant="body1" paragraph color="text.secondary">
-                  <strong>Centro Universitario de Ciencias Exactas e Ingenierías (CUCEI)</strong><br />
-                  Universidad de Guadalajara
-                </Typography>
-                <Typography variant="body1" paragraph color="text.secondary">
-                  Blvd. Marcelino García Barragán #1421<br />
-                  Col. Olímpica<br />
-                  Guadalajara, Jalisco, México<br />
-                  CP 44430
-                </Typography>
-                <Typography variant="body1" paragraph color="text.secondary">
-                  <strong>Email:</strong> contacto@supplie.me<br />
-                  <strong>Web:</strong> https://supplie.me
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid size={{ xs: 12, md: 7 }}>
-              <Paper elevation={0} sx={{ p: 0, borderRadius: 4, overflow: 'hidden', height: '100%' }}>
-                <Box sx={{ width: '100%', height: '100%', minHeight: '350px' }}>
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.3615169683976!2d-103.32802462406637!3d20.654866100514205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428b23a9bbba80d%3A0xdacdb7fd592feb90!2sCentro%20Universitario%20de%20Ciencias%20Exactas%20e%20Ingenier%C3%ADas%20(CUCEI)!5e0!3m2!1ses-419!2smx!4v1747631817015!5m2!1ses-419!2smx" 
-                    width="100%" height="100%" style={{ border: 0, minHeight: '350px' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-                  />
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Box>
-        
         {/* CTA */}
         <Box sx={{ textAlign: 'center', p: 6, borderRadius: 4, background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)', color: 'white' }}>
           <Typography variant="h4" fontWeight="bold" gutterBottom>¿Listo para digitalizar tu negocio?</Typography>

@@ -311,18 +311,14 @@ export default function CartPage() {
               </Box>
               
               <Button
+                component={Link}
+                href="/checkout"
                 variant="contained"
                 fullWidth
                 size="large"
-                disabled={isCheckingOut}
-                onClick={processCheckout}
                 sx={{ borderRadius: 2, py: 1.5 }}
               >
-                {isCheckingOut ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Finalizar Compra'
-                )}
+                Proceder al Checkout
               </Button>
               
               <Alert severity="info" sx={{ mt: 3 }}>
