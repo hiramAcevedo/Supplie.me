@@ -86,7 +86,7 @@ export default function Navbar() {
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar sx={{ py: { xs: 0.5, md: 1 } }}>
+          <Toolbar sx={{ py: { xs: 1.5, md: 2 }, minHeight: { xs: 64, md: 80 } }}>
             {/* Logo SVG */}
             <Box 
               sx={{ 
@@ -103,14 +103,23 @@ export default function Navbar() {
                   textDecoration: 'none' 
                 }}
               >
-                <Image 
-                  src="/supplie_me_logo_150x40.svg"
-                  alt="Supplie.me"
-                  width={130}
-                  height={35}
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
+                <Box
+                  sx={{
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.08)'
+                    }
+                  }}
+                >
+                  <Image 
+                    src="/supplie_me_logo_150x40.svg"
+                    alt="Supplie.me"
+                    width={150}
+                    height={42}
+                    style={{ objectFit: 'contain' }}
+                    priority
+                  />
+                </Box>
               </Link>
             </Box>
 
@@ -145,13 +154,14 @@ export default function Navbar() {
                 aria-label="carrito de compras"
                 sx={{ 
                   ml: 1,
+                  p: 1.5,
                   color: 'text.secondary',
                   '&:hover': { color: 'primary.main' }
                 }}
                 onClick={handleCartClick}
               >
                 <Badge badgeContent={totalItems} color="primary" max={99}>
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon sx={{ fontSize: 26 }} />
                 </Badge>
               </IconButton>
 
@@ -227,20 +237,20 @@ export default function Navbar() {
             <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
               <IconButton 
                 aria-label="carrito de compras"
-                sx={{ mr: 1, color: 'text.secondary' }}
+                sx={{ mr: 1, color: 'text.secondary', p: 1.5 }}
                 onClick={handleCartClick}
               >
                 <Badge badgeContent={totalItems} color="primary" max={99}>
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon sx={{ fontSize: 28 }} />
                 </Badge>
               </IconButton>
               
               <IconButton 
                 aria-label="menu"
                 onClick={toggleDrawer}
-                sx={{ color: 'text.secondary' }}
+                sx={{ color: 'text.secondary', p: 1.5 }}
               >
-                <span style={{fontSize: 28, fontWeight: 'bold'}}>≡</span>
+                <span style={{fontSize: 32, fontWeight: 'bold', lineHeight: 1}}>≡</span>
               </IconButton>
             </Box>
           </Toolbar>

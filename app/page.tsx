@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Container, 
   Typography, 
@@ -18,47 +18,50 @@ import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PersonIcon from '@mui/icons-material/Person';
 import { useProductStore } from '../store/productStore';
 import ProductSlider from '@/components/ui/ProductSlider';
 import VideoSection from '@/components/ui/VideoSection';
 
-// Imágenes para el carousel hero
-const carouselImages = [
+// Slides para el carousel hero - Todos naranja
+const carouselSlides = [
   {
-    src: '/supplie_me_logo_150x40.svg',
-    alt: 'Supplie.me - Tu tienda inteligente',
+    id: 'welcome',
     title: '¡Bienvenido a Supplie.me!',
     subtitle: 'Empoderamos tu tienda con tecnología inteligente',
-    isLogo: true
+    cta: { text: 'Explorar Tienda', href: '/products' },
+    showLogo: true
   },
   {
-    src: '/manzana.avif',
-    alt: 'Productos frescos',
-    title: 'Gestiona tu inventario fácilmente',
-    subtitle: 'Control total de productos y stock en tiempo real',
-    isLogo: false
+    id: 'inventory',
+    title: 'Digitaliza tu Tienda',
+    subtitle: 'Gestión inteligente de inventario y ventas para tu negocio',
+    cta: { text: 'Solicitar Demo', href: '/contact' },
+    icon: <StorefrontIcon sx={{ fontSize: { xs: 48, md: 80 } }} />,
+    showLogo: false
   },
   {
-    src: '/pollopechuga.jpeg',
-    alt: 'Carnes frescas',
-    title: 'Vende más, preocúpate menos',
-    subtitle: 'Sistema de punto de venta simple y efectivo',
-    isLogo: false
+    id: 'demo',
+    title: 'Prueba el Sistema',
+    subtitle: 'Explora cómo funcionaría tu tienda virtual con productos de ejemplo',
+    cta: { text: 'Ver Productos Demo', href: '/products' },
+    icon: <SpeedIcon sx={{ fontSize: { xs: 48, md: 80 } }} />,
+    showLogo: false
   }
 ];
 
-// Componente de Carousel Hero (principal)
-const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
+// Componente de Carousel Hero (principal) - Solo naranja
+const HeroCarousel = ({ slides }: { slides: typeof carouselSlides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images.length, isPaused]);
+  }, [slides.length, isPaused]);
 
   return (
     <Box 
@@ -66,16 +69,17 @@ const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
       onMouseLeave={() => setIsPaused(false)}
       sx={{
         position: 'relative',
-        height: {xs: '350px', md: '500px'},
+        height: { xs: '320px', sm: '380px', md: '450px' },
         overflow: 'hidden',
         borderRadius: 4,
+        mt: 3,
         mb: 6,
         background: 'linear-gradient(135deg, #F97316 0%, #FB923C 50%, #FCD34D 100%)'
       }}
     >
-      {images.map((image, index) => (
+      {slides.map((slide, index) => (
         <Box
-          key={index}
+          key={slide.id}
           sx={{
             position: 'absolute',
             top: 0,
@@ -83,44 +87,85 @@ const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
             width: '100%',
             height: '100%',
             opacity: index === currentIndex ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
+            transition: 'opacity 0.8s ease-in-out',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            pointerEvents: index === currentIndex ? 'auto' : 'none'
           }}
         >
-          <Container maxWidth="md" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: { xs: 'column', md: 'row' }, gap: 4, px: 4 }}>
+          <Container 
+            maxWidth="md" 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between', 
+              flexDirection: { xs: 'column', md: 'row' }, 
+              gap: 4, 
+              px: { xs: 2, sm: 4 }
+            }}
+          >
+            {/* Texto */}
             <Box sx={{ textAlign: { xs: 'center', md: 'left' }, color: 'white', zIndex: 2 }}>
-              <Typography variant="h3" component="h2" fontWeight="bold" gutterBottom sx={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
-                {image.title}
+              <Typography 
+                variant="h3" 
+                component="h2" 
+                fontWeight="bold" 
+                gutterBottom 
+                sx={{ 
+                  textShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem', lg: '3rem' },
+                  lineHeight: 1.2,
+                  mb: { xs: 1, md: 2 }
+                }}
+              >
+                {slide.title}
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.95, textShadow: '0 1px 5px rgba(0,0,0,0.2)' }}>
-                {image.subtitle}
+              
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  opacity: 0.95, 
+                  textShadow: '0 1px 5px rgba(0,0,0,0.2)',
+                  fontSize: { xs: '0.875rem', sm: '1rem', md: '1.25rem' },
+                  mb: { xs: 2, md: 3 }
+                }}
+              >
+                {slide.subtitle}
               </Typography>
-              {index === 0 && (
-                <Button 
-                  component={Link}
-                  href="/products"
-                  variant="contained"
-                  size="large"
-                  sx={{ 
-                    mt: 3, 
-                    bgcolor: 'white', 
-                    color: 'primary.main',
-                    fontWeight: 'bold',
-                    px: 4,
-                    '&:hover': { bgcolor: 'grey.100' }
-                  }}
-                >
-                  Explorar Tienda
-                </Button>
-              )}
+              
+              <Button 
+                component={Link}
+                href={slide.cta.href}
+                variant="contained"
+                size="large"
+                sx={{ 
+                  bgcolor: 'white', 
+                  color: 'primary.main',
+                  fontWeight: 'bold',
+                  px: { xs: 3, md: 5 },
+                  py: { xs: 1, md: 1.5 },
+                  fontSize: { xs: '0.875rem', md: '1rem' },
+                  borderRadius: 3,
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                  '&:hover': { 
+                    bgcolor: 'grey.100',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 25px rgba(0,0,0,0.25)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {slide.cta.text}
+              </Button>
             </Box>
+            
+            {/* Logo o Icono */}
             <Box sx={{ position: 'relative' }}>
-              {image.isLogo ? (
+              {slide.showLogo ? (
                 <Box sx={{ 
                   bgcolor: 'white', 
-                  p: 4, 
+                  p: { xs: 3, md: 4 }, 
                   borderRadius: 4, 
                   boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
                   display: 'flex',
@@ -128,27 +173,29 @@ const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
                   justifyContent: 'center'
                 }}>
                   <Image
-                    src={image.src}
-                    alt={image.alt}
+                    src="/supplie_me_logo_150x40.svg"
+                    alt="Supplie.me"
                     width={200}
                     height={55}
                     style={{ objectFit: 'contain' }}
                     priority
                   />
                 </Box>
-              ) : (
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={250}
-                  height={250}
-                  style={{ 
-                    objectFit: 'contain', 
-                    borderRadius: '12px',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+              ) : slide.icon ? (
+                <Box 
+                  sx={{ 
+                    bgcolor: 'rgba(255,255,255,0.15)', 
+                    p: { xs: 3, md: 4 }, 
+                    borderRadius: 4,
+                    color: 'white',
+                    '& svg': {
+                      filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))'
+                    }
                   }}
-                />
-              )}
+                >
+                  {slide.icon}
+                </Box>
+              ) : null}
             </Box>
           </Container>
         </Box>
@@ -159,46 +206,71 @@ const HeroCarousel = ({ images }: { images: typeof carouselImages }) => {
         <Box
           sx={{
             position: 'absolute',
-            top: 16,
-            right: 16,
+            top: { xs: 8, md: 16 },
+            right: { xs: 8, md: 16 },
             bgcolor: 'rgba(0,0,0,0.5)',
             color: 'white',
-            px: 2,
+            px: 1.5,
             py: 0.5,
             borderRadius: 2,
-            fontSize: '0.75rem'
+            fontSize: '0.7rem'
           }}
         >
-          ⏸ Pausado
+          Pausado
         </Box>
       )}
       
-      {/* Indicadores */}
+      {/* Indicadores de navegación */}
       <Box 
         sx={{
           position: 'absolute',
-          bottom: 24,
+          bottom: { xs: 16, md: 24 },
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
-          gap: 1.5
+          gap: 1
         }}
       >
-        {images.map((_, index) => (
+        {slides.map((_, index) => (
           <Box
             key={index}
             onClick={() => setCurrentIndex(index)}
             sx={{
-              width: index === currentIndex ? 32 : 12,
-              height: 12,
+              width: index === currentIndex ? 28 : 10,
+              height: 10,
               bgcolor: index === currentIndex ? 'white' : 'rgba(255,255,255,0.5)',
               borderRadius: 2,
               cursor: 'pointer',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: 'white'
+              }
             }}
           />
         ))}
       </Box>
+      
+      {/* Decoración de fondo */}
+      <Box sx={{ 
+        position: 'absolute', 
+        top: -80, 
+        right: -80, 
+        width: { xs: 150, md: 250 }, 
+        height: { xs: 150, md: 250 }, 
+        borderRadius: '50%', 
+        bgcolor: 'rgba(255,255,255,0.1)',
+        pointerEvents: 'none'
+      }} />
+      <Box sx={{ 
+        position: 'absolute', 
+        bottom: -50, 
+        left: -50, 
+        width: { xs: 100, md: 180 }, 
+        height: { xs: 100, md: 180 }, 
+        borderRadius: '50%', 
+        bgcolor: 'rgba(255,255,255,0.08)',
+        pointerEvents: 'none'
+      }} />
     </Box>
   );
 };
@@ -221,7 +293,7 @@ export default function Home() {
     <Box>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 8 }}>
         {/* Hero Carousel */}
-        <HeroCarousel images={carouselImages} />
+        <HeroCarousel slides={carouselSlides} />
 
         {/* Video de Presentación */}
         <Paper 

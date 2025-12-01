@@ -171,12 +171,33 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               autoComplete="email"
+              InputLabelProps={{
+                shrink: true,
+              }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  bgcolor: 'grey.50',
-                  '&:hover': { bgcolor: 'grey.100' },
+                  bgcolor: 'white',
+                  '&:hover': { bgcolor: 'grey.50' },
                   '&.Mui-focused': { bgcolor: 'white' }
+                },
+                '& .MuiInputLabel-root': {
+                  bgcolor: 'white',
+                  px: 0.5,
+                  '&.Mui-focused': {
+                    color: 'primary.main'
+                  }
+                },
+                '& input:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 100px white inset !important',
+                  WebkitTextFillColor: '#333 !important',
+                  borderRadius: '8px'
+                },
+                '& input:-webkit-autofill:hover': {
+                  WebkitBoxShadow: '0 0 0 100px #FAFAFA inset !important'
+                },
+                '& input:-webkit-autofill:focus': {
+                  WebkitBoxShadow: '0 0 0 100px white inset !important'
                 }
               }}
             />
@@ -193,12 +214,33 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               autoComplete="current-password"
+              InputLabelProps={{
+                shrink: true,
+              }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  bgcolor: 'grey.50',
-                  '&:hover': { bgcolor: 'grey.100' },
+                  bgcolor: 'white',
+                  '&:hover': { bgcolor: 'grey.50' },
                   '&.Mui-focused': { bgcolor: 'white' }
+                },
+                '& .MuiInputLabel-root': {
+                  bgcolor: 'white',
+                  px: 0.5,
+                  '&.Mui-focused': {
+                    color: 'primary.main'
+                  }
+                },
+                '& input:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 100px white inset !important',
+                  WebkitTextFillColor: '#333 !important',
+                  borderRadius: '8px'
+                },
+                '& input:-webkit-autofill:hover': {
+                  WebkitBoxShadow: '0 0 0 100px #FAFAFA inset !important'
+                },
+                '& input:-webkit-autofill:focus': {
+                  WebkitBoxShadow: '0 0 0 100px white inset !important'
                 }
               }}
             />
