@@ -1,5 +1,6 @@
 // Supplie.me - Prisma Schema
 // Sistema de Gestión de Inventario para Tiendas
+// Versión 2.0 - Modelo de datos completo
 
 generator client {
   provider = "prisma-client-js"
@@ -28,17 +29,77 @@ model User {
   role      UserRole @default(CUSTOMER)
   avatar    String?
   phone     String?
-  address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relaciones
-  orders       Order[]
-  cartItems    CartItem[]
-  chatMessages ChatMessage[]
-  faqQuestions FAQQuestion[]
+  orders          Order[]
+  cartItems       CartItem[]
+  chatMessages    ChatMessage[]
+  faqQuestions    FAQQuestion[]
+  faqComments     FAQComment[]
+  addresses       UserAddress[]
+  paymentMethods  UserPaymentMethod[]
+  reviews         ProductReview[]
+  reviewLikes     ReviewLike[]
+  contactMessages ContactMessage[]
 
   @@map("users")
+}
+
+// ============================================
+// DIRECCIONES DE USUARIO
+// ============================================
+
+model UserAddress {
+  id           String   @id @default(cuid())
+  alias        String   // "Casa", "Trabajo", etc.
+  street       String
+  number       String
+  neighborhood String   // Colonia
+  city         String
+  state        String
+  zipCode      String
+  reference    String?  // Referencias para encontrar el lugar
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relaciones
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_addresses")
+}
+
+// ============================================
+// MÉTODOS DE PAGO DE USUARIO
+// ============================================
+
+enum PaymentCardType {
+  VISA
+  MASTERCARD
+  AMEX
+  OTHER
+}
+
+model UserPaymentMethod {
+  id            String          @id @default(cuid())
+  alias         String          // "Tarjeta principal", etc.
+  cardType      PaymentCardType
+  lastFourDigits String         // Últimos 4 dígitos
+  cardHolder    String          // Nombre en la tarjeta
+  expiryMonth   Int
+  expiryYear    Int
+  isDefault     Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // Relaciones
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_payment_methods")
 }
 
 // ============================================
@@ -64,23 +125,87 @@ model Product {
   name            String
   description     String?
   price           Float
-  image           String
+  image           String   // Imagen principal
   stock           Int      @default(0)
   rating          Float    @default(0)
+  reviewCount     Int      @default(0)
   discountPercent Float?   @default(0)
   isActive        Boolean  @default(true)
   sku             String?  @unique
   barcode         String?
+  unit            String?  @default("pieza") // kg, litro, pieza, etc.
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Relaciones
   categoryId String
-  category   Category    @relation(fields: [categoryId], references: [id])
+  category   Category       @relation(fields: [categoryId], references: [id])
   cartItems  CartItem[]
   orderItems OrderItem[]
+  images     ProductImage[]
+  reviews    ProductReview[]
 
   @@map("products")
+}
+
+// ============================================
+// IMÁGENES DE PRODUCTOS (Galería)
+// ============================================
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int      @default(0) // Orden de la imagen en la galería
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// ============================================
+// RESEÑAS DE PRODUCTOS
+// ============================================
+
+model ProductReview {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5 estrellas
+  comment   String
+  helpful   Int      @default(0) // Contador de "útil"
+  verified  Boolean  @default(false) // Compra verificada
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  productId String
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes     ReviewLike[]
+
+  @@unique([productId, userId]) // Un usuario solo puede dejar una reseña por producto
+  @@map("product_reviews")
+}
+
+// ============================================
+// LIKES EN RESEÑAS
+// ============================================
+
+model ReviewLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  reviewId String
+  review   ProductReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId]) // Un usuario solo puede dar like una vez por reseña
+  @@map("review_likes")
 }
 
 // ============================================
@@ -216,9 +341,69 @@ model FAQQuestion {
 
   // Relaciones
   categoryId String
-  category   FAQCategory @relation(fields: [categoryId], references: [id])
+  category   FAQCategory  @relation(fields: [categoryId], references: [id])
   userId     String?
-  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments   FAQComment[]
 
   @@map("faq_questions")
+}
+
+// ============================================
+// COMENTARIOS EN FAQ
+// ============================================
+
+model FAQComment {
+  id        String   @id @default(cuid())
+  content   String
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  questionId String
+  question   FAQQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("faq_comments")
+}
+
+// ============================================
+// FORMULARIO DE CONTACTO
+// ============================================
+
+enum ContactInterest {
+  DEMO
+  BETA_TESTER
+  COLLABORATION
+  INFO
+  OTHER
+}
+
+enum ContactStatus {
+  PENDING
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+model ContactMessage {
+  id        String          @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  interest  ContactInterest
+  message   String
+  status    ContactStatus   @default(PENDING)
+  notes     String?         // Notas internas del admin
+  repliedAt DateTime?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  // Relaciones (opcional - si el usuario está logueado)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("contact_messages")
 }

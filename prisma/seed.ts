@@ -1,10 +1,17 @@
-import { PrismaClient, UserRole } from '@prisma/client';
+import { PrismaClient, UserRole, ContactInterest, ContactStatus } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
+}
+
+// Función para generar fechas aleatorias en los últimos 30 días
+function randomDate(daysAgo: number = 30): Date {
+  const date = new Date();
+  date.setDate(date.getDate() - Math.floor(Math.random() * daysAgo));
+  return date;
 }
 
 async function main() {
@@ -242,7 +249,199 @@ async function main() {
 
   console.log(`✅ ${faqData.length} preguntas frecuentes creadas`);
 
+  // ============================================
+  // CREAR DIRECCIONES DE USUARIOS
+  // ============================================
+  console.log('📍 Creando direcciones de usuarios...');
+
+  const demoUser = users.find(u => u.email === 'usuario@supplie.me');
+  const clienteUser = users.find(u => u.email === 'cliente@supplie.me');
+
+  if (demoUser) {
+    await prisma.userAddress.createMany({
+      data: [
+        {
+          userId: demoUser.id,
+          alias: 'Casa',
+          street: 'Av. Revolución',
+          number: '1234',
+          neighborhood: 'Centro',
+          city: 'Guadalajara',
+          state: 'Jalisco',
+          zipCode: '44100',
+          reference: 'Frente al parque',
+          isDefault: true
+        },
+        {
+          userId: demoUser.id,
+          alias: 'Trabajo',
+          street: 'Blvd. Marcelino García Barragán',
+          number: '1421',
+          neighborhood: 'Olímpica',
+          city: 'Guadalajara',
+          state: 'Jalisco',
+          zipCode: '44430',
+          reference: 'CUCEI - Edificio principal',
+          isDefault: false
+        }
+      ]
+    });
+  }
+
+  if (clienteUser) {
+    await prisma.userAddress.create({
+      data: {
+        userId: clienteUser.id,
+        alias: 'Mi Casa',
+        street: 'Calle López Cotilla',
+        number: '567',
+        neighborhood: 'Americana',
+        city: 'Guadalajara',
+        state: 'Jalisco',
+        zipCode: '44160',
+        reference: 'Casa azul con portón negro',
+        isDefault: true
+      }
+    });
+  }
+
+  console.log('✅ Direcciones de usuarios creadas');
+
+  // ============================================
+  // CREAR RESEÑAS DE PRODUCTOS
+  // ============================================
+  console.log('⭐ Creando reseñas de productos...');
+
+  const allProducts = await prisma.product.findMany({ take: 10 });
+  const allCustomers = users.filter(u => u.role === UserRole.CUSTOMER);
+
+  const reviewsData = [
+    { rating: 5, comment: 'Excelente producto, muy fresco y de buena calidad. Lo recomiendo ampliamente para toda la familia.', helpful: 12, verified: true },
+    { rating: 4, comment: 'Buen producto, llegó en buen estado. El precio es competitivo comparado con otras tiendas.', helpful: 8, verified: true },
+    { rating: 5, comment: 'Me encantó! La calidad es superior a lo que esperaba. Definitivamente volveré a comprar.', helpful: 15, verified: false },
+    { rating: 3, comment: 'Está bien, cumple su función aunque esperaba un poco más por el precio.', helpful: 3, verified: true },
+    { rating: 5, comment: 'Perfecto para mi familia. Muy buena relación calidad-precio.', helpful: 7, verified: true },
+    { rating: 4, comment: 'Buena calidad, el envío fue rápido. Recomendado.', helpful: 5, verified: false },
+  ];
+
+  let reviewCount = 0;
+  for (const product of allProducts.slice(0, 5)) {
+    for (let i = 0; i < Math.min(2, allCustomers.length); i++) {
+      const reviewData = reviewsData[reviewCount % reviewsData.length];
+      try {
+        await prisma.productReview.create({
+          data: {
+            productId: product.id,
+            userId: allCustomers[i].id,
+            rating: reviewData.rating,
+            comment: reviewData.comment,
+            helpful: reviewData.helpful,
+            verified: reviewData.verified,
+            createdAt: randomDate(30)
+          }
+        });
+        reviewCount++;
+      } catch {
+        // Ignorar si ya existe la reseña
+      }
+    }
+  }
+
+  console.log(`✅ ${reviewCount} reseñas de productos creadas`);
+
+  // ============================================
+  // CREAR MENSAJES DE CONTACTO
+  // ============================================
+  console.log('📧 Creando mensajes de contacto...');
+
+  const contactMessages = [
+    {
+      name: 'Juan Pérez',
+      email: 'juan.perez@gmail.com',
+      phone: '3312345678',
+      interest: ContactInterest.DEMO,
+      message: 'Tengo una tienda de abarrotes en Zapopan y me gustaría ver una demostración del sistema. ¿Cuándo podríamos agendar una llamada?',
+      status: ContactStatus.PENDING
+    },
+    {
+      name: 'María González',
+      email: 'maria.gonzalez@hotmail.com',
+      phone: '3398765432',
+      interest: ContactInterest.BETA_TESTER,
+      message: 'Me interesa mucho su plataforma. Tengo un minisuper y me gustaría ser parte del programa de beta testers.',
+      status: ContactStatus.READ
+    },
+    {
+      name: 'Carlos Ramírez',
+      email: 'carlos.dev@gmail.com',
+      phone: null,
+      interest: ContactInterest.COLLABORATION,
+      message: 'Soy desarrollador full-stack con experiencia en React y Node.js. Me encantaría contribuir al proyecto.',
+      status: ContactStatus.REPLIED
+    },
+    {
+      name: 'Ana López',
+      email: 'ana.lopez@outlook.com',
+      phone: '3345678901',
+      interest: ContactInterest.INFO,
+      message: '¿Cuáles son los costos del servicio? ¿Hay algún plan para tiendas pequeñas?',
+      status: ContactStatus.PENDING
+    }
+  ];
+
+  for (const msg of contactMessages) {
+    await prisma.contactMessage.create({
+      data: {
+        ...msg,
+        createdAt: randomDate(15)
+      }
+    });
+  }
+
+  console.log(`✅ ${contactMessages.length} mensajes de contacto creados`);
+
+  // ============================================
+  // CREAR COMENTARIOS EN FAQ
+  // ============================================
+  console.log('💬 Creando comentarios en FAQ...');
+
+  const faqQuestions = await prisma.fAQQuestion.findMany({ take: 3 });
+  
+  const faqCommentsData = [
+    'Muy útil esta información, gracias!',
+    'Esto me ayudó mucho a entender el sistema.',
+    '¿Hay algún tutorial en video sobre esto?',
+    'Excelente respuesta, justo lo que buscaba.'
+  ];
+
+  let commentCount = 0;
+  for (const question of faqQuestions) {
+    for (let i = 0; i < Math.min(1, allCustomers.length); i++) {
+      await prisma.fAQComment.create({
+        data: {
+          questionId: question.id,
+          userId: allCustomers[i].id,
+          content: faqCommentsData[commentCount % faqCommentsData.length],
+          likes: Math.floor(Math.random() * 10),
+          createdAt: randomDate(20)
+        }
+      });
+      commentCount++;
+    }
+  }
+
+  console.log(`✅ ${commentCount} comentarios en FAQ creados`);
+
   console.log('\n🎉 Seed completado exitosamente!');
+  console.log('📊 Resumen de datos creados:');
+  console.log(`   - ${categories.length} categorías`);
+  console.log(`   - ${users.length} usuarios`);
+  console.log(`   - ${productsData.length} productos`);
+  console.log(`   - ${faqCategories.length} categorías de FAQ`);
+  console.log(`   - ${faqData.length} preguntas frecuentes`);
+  console.log(`   - ${reviewCount} reseñas de productos`);
+  console.log(`   - ${contactMessages.length} mensajes de contacto`);
+  console.log(`   - ${commentCount} comentarios en FAQ`);
 }
 
 main()
